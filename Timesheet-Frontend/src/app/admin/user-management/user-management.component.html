@@ -1,0 +1,90 @@
+<div class="user-management p-4">
+  
+  <!-- Title and Toggle Button -->
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-bold">User Management</h1>
+    <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" (click)="toggleForm()">
+      {{ showForm ? 'Close Form' : 'Add New User' }}
+    </button>
+  </div>
+
+  <!-- User Form (Toggle) -->
+  <form *ngIf="showForm" [formGroup]="userForm" (ngSubmit)="isEditMode ? updateUser() : addUser()"
+    class="bg-gray-100 p-4 rounded shadow-md mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div *ngFor="let field of ['name', 'email', 'password', 'phone', 'department', 'role', 'businessUnit']">
+        <label [for]="field" class="block text-gray-700 font-medium">{{ field | titlecase }}</label>
+        <input [id]="field" [formControlName]="field" [type]="field === 'password' ? 'password' : 'text'"
+          [placeholder]="'Enter ' + field"
+          class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        <div *ngIf="userForm.get(field)?.invalid && userForm.get(field)?.touched" class="text-red-500 text-sm">
+          {{ field | titlecase }} is required.
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-4 mt-4">
+      <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+        [disabled]="userForm.invalid">
+        {{ isEditMode ? 'Update User' : 'Add User' }}
+      </button>
+      <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600" (click)="resetForm()"
+        *ngIf="isEditMode">
+        Cancel
+      </button>
+    </div>
+  </form>
+
+  <!-- Search and Filters -->
+  <div class="flex flex-wrap gap-4 mb-4">
+    <input type="text" placeholder="Search by name" [(ngModel)]="searchQuery" (ngModelChange)="applyFilters()"
+      class="w-full md:w-1/3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    <select [(ngModel)]="selectedDepartment" (change)="applyFilters()"
+      class="w-full md:w-1/3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+      <option value="">All Departments</option>
+      <option *ngFor="let department of uniqueDepartments" [value]="department">
+        {{ department }}
+      </option>
+    </select>
+    <select [(ngModel)]="selectedBusinessUnit" (change)="applyFilters()"
+      class="w-full md:w-1/3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+      <option value="">All Business Units</option>
+      <option *ngFor="let unit of uniqueBusinessUnits" [value]="unit">
+        {{ unit }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Users Table -->
+  <div class="overflow-x-auto">
+    <table class="w-full table-auto bg-white shadow-md rounded">
+      <thead>
+        <tr class="bg-gray-200 text-gray-700">
+          <th class="p-2">Name</th>
+          <th class="p-2">Email</th>
+          <th class="p-2">Phone</th>
+          <th class="p-2">Department</th>
+          <th class="p-2">Role</th>
+          <th class="p-2">Business Unit</th>
+          <th class="p-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of filteredUsers" class="border-b hover:bg-gray-100">
+          <td class="p-2">{{ user.name }}</td>
+          <td class="p-2">{{ user.email }}</td>
+          <td class="p-2">{{ user.phone }}</td>
+          <td class="p-2">{{ user.department }}</td>
+          <td class="p-2">{{ user.role }}</td>
+          <td class="p-2">{{ user.businessUnit }}</td>
+          <td class="p-2">
+            <button (click)="editUser(user)" class="text-blue-500 hover:underline mr-2">Edit</button>
+            <button (click)="deleteUser(user._id)" class="text-red-500 hover:underline">Delete</button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredUsers.length === 0">
+          <td colspan="7" class="text-center p-4 text-gray-500">No users found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

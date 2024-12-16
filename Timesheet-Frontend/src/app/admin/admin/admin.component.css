@@ -1,0 +1,5 @@
+/* Ensures dropdown visibility on hover */
+.relative:hover .absolute {
+    display: block;
+  }
+  

@@ -1,0 +1,55 @@
+<div class="max-w-7xl mx-auto p-4">
+  <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Admin Timelog Management</h2>
+
+  <!-- Filter Section -->
+  <div class="flex items-center justify-end mb-4">
+    <label class="text-sm font-medium text-gray-700 mr-2">Filter by:</label>
+    <select [(ngModel)]="filter" (change)="fetchTimelogs()"
+      class="w-40 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+      <option value="day">Day</option>
+      <option value="week">Week</option>
+      <option value="month">Month</option>
+      <option value="year">Year</option>
+    </select>
+  </div>
+
+  <!-- Timelog Table -->
+  <div class="overflow-x-auto bg-white shadow-md rounded-lg">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-600 uppercase">Date</th>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-600 uppercase">Project</th>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-600 uppercase">Task</th>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-600 uppercase">Hours</th>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-600 uppercase">Status</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="timelogs.length > 0; else noData" class="divide-y divide-gray-200">
+        <tr *ngFor="let log of timelogs" class="hover:bg-gray-50">
+          <td class="px-4 py-2 text-gray-700">{{ log.date }}</td>
+          <td class="px-4 py-2 text-gray-700">{{ log.project }}</td>
+          <td class="px-4 py-2 text-gray-700">{{ log.task }}</td>
+          <td class="px-4 py-2 text-gray-700">{{ log.hours }}</td>
+          <td class="px-4 py-2">
+            <span [ngClass]="{
+                  'bg-green-200 text-green-700': log.status === 'completed',
+                  'bg-yellow-200 text-yellow-700': log.status === 'in-progress'
+                }" class="px-2 py-1 rounded-md text-xs font-semibold">
+              {{ log.status }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+
+      <!-- No Data Message -->
+      <ng-template #noData>
+        <tr>
+          <td colspan="5" class="text-center text-gray-500 py-4">
+            No timelogs found for the selected filter.
+          </td>
+        </tr>
+      </ng-template>
+    </table>
+  </div>
+</div>

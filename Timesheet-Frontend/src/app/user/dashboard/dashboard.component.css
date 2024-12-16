@@ -1,0 +1,16 @@
+.container {
+    margin-top: 30px;
+  }
+  
+  h2 {
+    color: #343a40;
+  }
+  
+  .table {
+    margin-top: 20px;
+  }
+  
+  th, td {
+    text-align: center;
+  }
+  

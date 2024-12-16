@@ -1,0 +1,80 @@
+<div class="container mx-auto p-5">
+  <h1 class="text-2xl font-bold mb-5">Project Management</h1>
+
+  <!-- Search and Filter -->
+  <div class="flex items-center gap-4 mb-5">
+    <input type="text" class="border rounded p-2 w-full" placeholder="Search projects..." [(ngModel)]="searchTerm"
+      (input)="filterProjects()" />
+
+    <select class="border rounded p-2" [(ngModel)]="selectedFilter" (change)="filterProjects()">
+      <option value="">All Types</option>
+      <option value="Internal">Internal</option>
+      <option value="External">External</option>
+    </select>
+  </div>
+
+  <!-- Projects Table -->
+  <table class="table-auto border-collapse border w-full">
+    <thead>
+      <tr class="bg-gray-200">
+        <th class="border p-2">Name</th>
+        <th class="border p-2">Client</th>
+        <th class="border p-2">Address</th>
+        <th class="border p-2">Department</th>
+        <th class="border p-2">Business Unit</th>
+        <th class="border p-2">Type</th>
+        <th class="border p-2">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let project of filteredProjects">
+        <td class="border p-2">{{ project.name }}</td>
+        <td class="border p-2">{{ project.client }}</td>
+        <td class="border p-2">{{ project.address }}</td>
+        <td class="border p-2">{{ project.department }}</td>
+        <td class="border p-2">{{ project.businessUnit }}</td>
+        <td class="border p-2">{{ project.type }}</td>
+        <td class="border p-2">
+          <button (click)="editProject(project)" class="text-blue-500">Edit</button>
+          <button (click)="deleteProject(project._id)" class="text-red-500 ml-2">Delete</button>
+          <button (click)="openAssignUsersModal(project)" class="text-green-500 ml-2">Assign Users</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Add/Edit Project Form -->
+  <form [formGroup]="projectForm" class="mt-5 border p-5" (ngSubmit)="addOrUpdateProject()">
+    <h2 class="text-xl font-bold mb-5">{{ isEdit ? 'Edit Project' : 'Add Project' }}</h2>
+    <div class="grid grid-cols-2 gap-4">
+      <input formControlName="name" placeholder="Project Name" class="border p-2 rounded" />
+      <input formControlName="client" placeholder="Client Name" class="border p-2 rounded" />
+      <input formControlName="address" placeholder="Address" class="border p-2 rounded" />
+      <input formControlName="department" placeholder="Department" class="border p-2 rounded" />
+      <input formControlName="businessUnit" placeholder="Business Unit" class="border p-2 rounded" />
+      <select formControlName="type" class="border p-2 rounded">
+        <option value="Internal">Internal</option>
+        <option value="External">External</option>
+      </select>
+    </div>
+    <button type="submit" class="bg-blue-500 text-white p-2 rounded mt-5">{{ isEdit ? 'Update' : 'Add' }}</button>
+  </form>
+
+  <!-- Assign Users Modal -->
+  <div *ngIf="isAssignUsersModalOpen"
+    class="modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="modal-content bg-white p-5 rounded">
+      <h2 class="text-xl font-bold mb-5">Assign Users to {{ selectedProject?.name }}</h2>
+      <form [formGroup]="assignUsersForm" (ngSubmit)="assignUsersToProject()">
+        <select formControlName="users" class="border p-2 rounded w-full" multiple>
+          <option *ngFor="let user of users" [value]="user._id">{{ user.name }}</option>
+        </select>
+        <div class="flex justify-end gap-4 mt-5">
+          <button type="button" class="bg-gray-500 text-white p-2 rounded"
+            (click)="closeAssignUsersModal()">Cancel</button>
+          <button type="submit" class="bg-green-500 text-white p-2 rounded">Assign</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

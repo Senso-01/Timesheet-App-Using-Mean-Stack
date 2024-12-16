@@ -1,0 +1,31 @@
+<div class="flex h-screen bg-gray-100">
+
+  <!-- Dashboard Content -->
+  <section class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <!-- Planned vs Actual Hours -->
+    <div class="p-4 bg-white rounded shadow">
+      <h3 class="text-lg font-semibold mb-2">Planned vs Actual Hours</h3>
+      <canvas id="hoursChart"></canvas>
+    </div>
+
+    <!-- Project Status -->
+    <div class="p-4 bg-white rounded shadow">
+      <h3 class="text-lg font-semibold mb-2">Project Status</h3>
+      <ul>
+        <li *ngFor="let project of projects">
+          {{ project.name }} - {{ project.status }}
+        </li>
+      </ul>
+    </div>
+
+    <!-- Employee Performance -->
+    <div class="p-4 bg-white rounded shadow">
+      <h3 class="text-lg font-semibold mb-2">Employee Performance</h3>
+      <ul>
+        <li *ngFor="let employee of employees">
+          {{ employee.name }} - {{ employee.performance }}%
+        </li>
+      </ul>
+    </div>
+  </section>
+</div>

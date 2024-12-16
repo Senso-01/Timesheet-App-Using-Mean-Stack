@@ -1,0 +1,29 @@
+<div class="container">
+  <h2 class="text-center mb-4">Assigned Projects</h2>
+
+  <!-- Table for Assigned Projects -->
+  <table class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Project Name</th>
+        <th>Description</th>
+        <th>Assigned Users</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let project of assignedProjects; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ project.name }}</td>
+        <td>{{ project.description }}</td>
+        <td>
+          <ul>
+            <li *ngFor="let user of project.assignedUsers">
+              {{ user.name }} ({{ user.email }})
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,88 @@
+<div class="container mt-4">
+  <h2>Task Management</h2>
+
+  <!-- Task Form -->
+  <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="mb-4">
+    <div class="form-group mb-3">
+      <label for="name">Task Name</label>
+      <input id="name" type="text" formControlName="name" class="form-control" placeholder="Enter task name" />
+      <div *ngIf="taskForm.get('name')?.invalid && taskForm.get('name')?.touched" class="text-danger">
+        Task name is required.
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="description">Description</label>
+      <textarea id="description" formControlName="description" class="form-control"
+        placeholder="Enter task description"></textarea>
+      <div *ngIf="
+          taskForm.get('description')?.invalid &&
+          taskForm.get('description')?.touched
+        " class="text-danger">
+        Description is required.
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="plannedHours">Planned Hours</label>
+      <input id="plannedHours" type="number" formControlName="plannedHours" class="form-control"
+        placeholder="Enter planned hours" />
+      <div *ngIf="
+          taskForm.get('plannedHours')?.invalid &&
+          taskForm.get('plannedHours')?.touched
+        " class="text-danger">
+        Planned hours must be greater than 0.
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="status">Status</label>
+      <select id="status" formControlName="status" class="form-control">
+        <option *ngFor="let status of statuses" [value]="status">
+          {{ status }}
+        </option>
+      </select>
+      <div *ngIf="
+          taskForm.get('status')?.invalid && taskForm.get('status')?.touched
+        " class="text-danger">
+        Status is required.
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="projectId">Project</label>
+      <select id="projectId" formControlName="projectId" class="form-control">
+        <option value="" disabled>Select a project</option>
+        <option *ngFor="let project of projects" [value]="project._id">
+          {{ project.name }}
+        </option>
+      </select>
+      <div *ngIf="
+          taskForm.get('projectId')?.invalid &&
+          taskForm.get('projectId')?.touched
+        " class="text-danger">
+        Project is required.
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="taskForm.invalid">
+      Add Task
+    </button>
+  </form>
+
+  <!-- Task List -->
+  <h3>Task List</h3>
+  <div *ngIf="loading" class="alert alert-info">Loading tasks...</div>
+  <div *ngIf="!loading && tasks.length === 0" class="alert alert-info">
+    No tasks available.
+  </div>
+  <ul class="list-group" *ngIf="!loading">
+    <li *ngFor="let task of tasks" class="list-group-item">
+      <h5>{{ task.name }}</h5>
+      <p><strong>Description:</strong> {{ task.description }}</p>
+      <p><strong>Planned Hours:</strong> {{ task.plannedHours }}</p>
+      <p><strong>Status:</strong> {{ task.status }}</p>
+      <p><strong>Project:</strong> {{ getProjectName(task.projectId) }}</p>
+    </li>
+  </ul>
+</div>
