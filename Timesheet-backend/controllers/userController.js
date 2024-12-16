@@ -1,5 +1,15 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
+
+// Configure Nodemailer (use your own credentials)
+const transporter = nodemailer.createTransport({
+  service: "gmail", // Or any other email service
+  auth: {
+    user: "your-email@gmail.com", // Your Gmail address
+    pass: "your-email-password", // Your email app password
+  },
+});
 
 // Controller for user login
 const loginUser = async (req, res) => {
@@ -35,6 +45,16 @@ const registerUser = async (req, res) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
+    /* // Send email with username and password
+    const mailOptions = {
+      from: "your-email@gmail.com",
+      to: email,
+      subject: "Your Account Credentials",
+      text: `Hello ${name},\n\nYour account has been created successfully!\n\nUsername: ${name}\nPassword: ${password}\n\nThank you!`,
+    };
+    // Send email
+    await transporter.sendMail(mailOptions); */
+    
     const user = await User.create({
       name,
       email,
